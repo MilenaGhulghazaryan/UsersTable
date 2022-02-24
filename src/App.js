@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import express from "express";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const app = express();
 
-export default App;
+let users = {};
+
+app.use(express.static("public"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+
+
+//CREATE
+app.post("/users", (req, res) => {
+    const id = `user_${Date.now()}_${Math.random()}`;
+    const newUser = {
+        id,
+        ...req.body
+    };
+
+    users[id] = newUser;
+    res.send(newUser);
+});
+
+
+app.listen(3002);
